@@ -1,9 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-
+import 'dart:html' as html;
+import 'dart:convert';
 
 class AIRecommendationPage extends StatefulWidget {
   @override
@@ -11,118 +10,138 @@ class AIRecommendationPage extends StatefulWidget {
 }
 
 class _AIRecommendationPageState extends State<AIRecommendationPage> {
-  File? _image;
-  String? _outputImageUrl;
-  bool _isUploading = false;
-  bool _isAnalyzing = false;
+  Uint8List? _selectedImage;
+  Uint8List? _outputImage;
+  String? _filename;
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  void _pickImage() {
+    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.accept = "image/*"; // Allow only images
+    uploadInput.click();
 
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-        _outputImageUrl = null;
-      });
-    }
+    uploadInput.onChange.listen((event) {
+      final files = uploadInput.files;
+      if (files!.isNotEmpty) {
+        final file = files[0];
+        final reader = html.FileReader();
+
+        reader.readAsArrayBuffer(file);
+        reader.onLoadEnd.listen((e) {
+          setState(() {
+            _selectedImage = reader.result as Uint8List?;
+            _filename = file.name;
+          });
+        });
+      }
+    });
   }
 
-  Future<void> _uploadImage() async {
-    if (_image == null) return;
+  Future<void> _uploadAndAnalyzeImage() async {
+    if (_selectedImage == null || _filename == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select an image first!"))
+      );
+      return;
+    }
 
-    setState(() {
-      _isUploading = true;
-    });
-
-    var request = http.MultipartRequest('POST', Uri.parse('http://127.0.0.1:5000/upload'));
-    request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
+    var uri = Uri.parse("http://127.0.0.1:5000/upload");
+    var request = http.MultipartRequest("POST", uri);
+    request.files.add(http.MultipartFile.fromBytes(
+      "file", 
+      _selectedImage!,
+      filename: _filename!,
+    ));
 
     var response = await request.send();
-    var responseBody = await response.stream.bytesToString();
-    var jsonResponse = jsonDecode(responseBody);
 
     if (response.statusCode == 200) {
-      String filename = jsonResponse['filename'];
-      _analyzeImage(filename);
+      var responseBody = await response.stream.bytesToString();
+      var filename = jsonDecode(responseBody)["filename"];
+
+      // Now send a request to analyze the image
+      var analyzeResponse = await http.post(
+        Uri.parse("http://127.0.0.1:5000/analyze"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"filename": filename}),
+      );
+
+      if (analyzeResponse.statusCode == 200) {
+        var outputFilename = jsonDecode(analyzeResponse.body)["output_filename"];
+        var imageResponse = await http.get(Uri.parse("http://127.0.0.1:5000/get_output/$outputFilename"));
+
+        setState(() {
+          _outputImage = imageResponse.bodyBytes;
+        });
+      } else {
+        print("Analysis failed: ${analyzeResponse.body}");
+      }
     } else {
-      setState(() {
-        _isUploading = false;
-      });
-      _showError(jsonResponse['error']);
+      print("Upload failed: ${response.reasonPhrase}");
     }
-  }
-
-  Future<void> _analyzeImage(String filename) async {
-    setState(() {
-      _isAnalyzing = true;
-    });
-
-    var response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/analyze'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'filename': filename}),
-    );
-
-    var jsonResponse = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        _outputImageUrl = 'http://127.0.0.1:5000/get_output/${jsonResponse['output_filename']}';
-        _isAnalyzing = false;
-        _isUploading = false;
-      });
-    } else {
-      setState(() {
-        _isAnalyzing = false;
-        _isUploading = false;
-      });
-      _showError(jsonResponse['error']);
-    }
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Hexa Farm Analyzer")),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+      appBar: AppBar(title: Text("AI Recommendation")),
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _image != null
-                ? Image.file(_image!, height: 200)
-                : Text("No image selected", style: TextStyle(fontSize: 16)),
+            SizedBox(height: 20),
+            Text("Upload a Balcony/Outdoor Image", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
+            _selectedImage != null
+                ? Image.memory(_selectedImage!, width: 300, height: 200, fit: BoxFit.cover)
+                : Text("No image selected"),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickImage,
-              child: Text("Pick Image"),
+              child: Text("Upload Image"),
             ),
-            SizedBox(height: 10),
-            _isUploading
-                ? CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _uploadImage,
-                    child: Text("Analyze"),
-                  ),
             SizedBox(height: 20),
-            _outputImageUrl != null
+            ElevatedButton(
+              onPressed: _uploadAndAnalyzeImage,
+              child: Text("Analyze"),
+            ),
+            SizedBox(height: 20),
+            _outputImage != null
                 ? Column(
                     children: [
-                      Image.network(_outputImageUrl!, height: 200),
+                      Text("Optimized Layout", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       SizedBox(height: 10),
-                      Text("Analysis complete!"),
+                      Image.memory(_outputImage!, width: 300, height: 200, fit: BoxFit.cover),
+                      SizedBox(height: 20),
+                      _buildColorCodeLegend(), // Add color code legend
                     ],
                   )
-                : SizedBox(),
+                : Container(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildColorCodeLegend() {
+    return Column(
+      children: [
+        Text("Color Code Guide", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        SizedBox(height: 10),
+        _buildColorLegendItem(Colors.green, "Green - Plants in Pots"),
+        _buildColorLegendItem(Colors.blue, "Blue - Hanging Plants"),
+        _buildColorLegendItem(Colors.red, "Red - Trellis Plants (Climbers)"),
+      ],
+    );
+  }
+
+  Widget _buildColorLegendItem(Color color, String text) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(width: 20, height: 20, color: color),
+        SizedBox(width: 10),
+        Text(text, style: TextStyle(fontSize: 16)),
+      ],
     );
   }
 }
