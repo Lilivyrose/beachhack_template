@@ -30,7 +30,7 @@ class _CropDetailsPageState extends State<CropDetailsPage> {
 
   // Load crop data from the local JSON file
   Future<List<dynamic>> loadCropData() async {
-    final String response = await rootBundle.loadString('assets/crops.json');
+    final String response = await rootBundle.loadString('/assets/crops.json');
     return json.decode(response);
   }
 

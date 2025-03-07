@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class RecommendationsPage extends StatefulWidget {
-  const RecommendationsPage({super.key});
-
   @override
   _RecommendationsPageState createState() => _RecommendationsPageState();
 }
@@ -14,10 +12,10 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
   bool isLoading = false;
 
   final Map<String, List<String>> vegetableZones = {
-    "Tropical": ["🍅 Tomato", "🌶 Chili", "🍆 Eggplant", "🌿 Okra", "🎃 Pumpkin"],
-    "Temperate": ["🥕 Carrot", "🥬 Lettuce", "🌱 Spinach", "🥦 Broccoli", "🥬 Cabbage"],
-    "Arid": ["🌵 Cactus Pear", "🧄 Garlic", "🧅 Onion", "🫑 Bell Pepper", "🥒 Zucchini"],
-    "Cold": ["🥔 Potato", "🌰 Radish", "🍠 Beetroot", "🌿 Peas", "🥬 Kale"],
+    "Tropical": ["🍅 Tomato", "🌶 Chili", "🍆 Eggplant", "🌿 Okra", "🎃 Pumpkin", "🥭 Mango", "🍍 Pineapple"],
+    "Temperate": ["🥕 Carrot", "🥬 Lettuce", "🌱 Spinach", "🥦 Broccoli", "🥬 Cabbage", "🍏 Apple", "🍓 Strawberry"],
+    "Arid": ["🌵 Cactus Pear", "🧄 Garlic", "🧅 Onion", "🫑 Bell Pepper", "🥒 Zucchini", "🍉 Watermelon", "🥜 Peanuts"],
+    "Cold": ["🥔 Potato", "🌰 Radish", "🍠 Beetroot", "🌿 Peas", "🥬 Kale", "🍒 Cherry", "🍎 Cranberry"],
   };
 
   @override
@@ -69,7 +67,7 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
     }
 
     setState(() {
-      recommendedVegetables = vegetableZones[zone] ?? ["No data available"];
+      recommendedVegetables = List.from(vegetableZones[zone] ?? []);
       isLoading = false;
     });
   }
@@ -94,73 +92,119 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
         backgroundColor: Colors.green,
       ),
       backgroundColor: Colors.lightGreen[100],
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text(
-                location,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  location,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            isLoading
-                ? const Center(child: CircularProgressIndicator(color: Colors.green))
-                : recommendedVegetables.isNotEmpty
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "🌱 Recommended Vegetables:",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
+              const SizedBox(height: 20),
+              isLoading
+                  ? const Center(child: CircularProgressIndicator(color: Colors.green))
+                  : recommendedVegetables.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "🌱 Recommended Vegetables:",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
-                              ],
+                            const SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: recommendedVegetables
+                                    .map(
+                                      (veg) => Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.eco, color: Colors.green),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              veg,
+                                              style: const TextStyle(fontSize: 16),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                             ),
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: recommendedVegetables
-                                  .map(
-                                    (veg) => Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      child: Row(
+                            const SizedBox(height: 20),
+
+                            // Plant Care Requirements
+                            const Text(
+                              "🗓 Plant Care Requirements:",
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
+                            ),
+                            const SizedBox(height: 10),
+
+                            Wrap(
+                              spacing: 10, // Horizontal space between cards
+                              runSpacing: 10, // Vertical space between cards
+                              children: recommendedVegetables.map((plant) {
+                                return SizedBox(
+                                  width: MediaQuery.of(context).size.width / 2 - 25,
+                                  child: Card(
+                                    elevation: 4,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Icon(Icons.eco, color: Colors.green),
-                                          const SizedBox(width: 10),
                                           Text(
-                                            veg,
-                                            style: const TextStyle(fontSize: 16),
+                                            "🌿 $plant",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green,
+                                            ),
                                           ),
+                                          const SizedBox(height: 5),
+                                          Text("💧 Watering: Every 2 days", style: TextStyle(fontSize: 14)),
+                                          Text("🌱 Fertilizing: Weekly", style: TextStyle(fontSize: 14)),
+                                          Text("☀ Sunlight: 6-8 hours", style: TextStyle(fontSize: 14)),
                                         ],
                                       ),
                                     ),
-                                  )
-                                  .toList(),
+                                  ),
+                                );
+                              }).toList(),
                             ),
+                          ],
+                        )
+                      : const Center(
+                          child: Text(
+                            "No recommendations available.",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                           ),
-                        ],
-                      )
-                    : const Center(
-                        child: Text(
-                          "No recommendations available.",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                      ),
-          ],
+            ],
+          ),
         ),
       ),
     );
