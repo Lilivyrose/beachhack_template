@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class RecommendationsPage extends StatefulWidget {
+  const RecommendationsPage({super.key});
+
   @override
   _RecommendationsPageState createState() => _RecommendationsPageState();
 }

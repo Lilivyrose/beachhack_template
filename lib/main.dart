@@ -6,6 +6,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +18,8 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -37,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       // Show error message if fields are empty
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Please enter both username and password!"),
           backgroundColor: Colors.red,
         ),
@@ -66,14 +70,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               // Username Field
-              Text(
+              const Text(
                 'Username:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
@@ -81,17 +85,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   hintText: "Enter your username",
-                  prefixIcon: Icon(Icons.person, color: Colors.grey),
+                  prefixIcon: const Icon(Icons.person, color: Colors.grey),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Password Field
-              Text(
+              const Text(
                 'Password:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextField(
                 controller: passwordController,
                 obscureText: true,
@@ -100,10 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   hintText: "Enter your password",
-                  prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                  prefixIcon: const Icon(Icons.lock, color: Colors.grey),
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
 
               // Login Button
               Center(
@@ -111,12 +115,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: handleLogin,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Login",
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
