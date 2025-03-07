@@ -1,24 +1,30 @@
 # Project Name
-
+HexaFarm
 ## 🚀 Project Description
-A concise, engaging description of your hackathon project.
-
+HexaFarm is an AI-powered crop recommendation system that helps users choose the best crops based on their location, weather. HexaFarm aims to simplify organic farming by offering data-driven insights for better crop selection.
 ## 🎯 Link to Project
-[live link of project](live_link)
+[live link of project]https://prod.liveshare.vsengsaas.visualstudio.com/join?7DFDB1C498FB92CAA3271071E3911EF3BD19
 
 ## 🛠 Tech Stack
-- List the primary technologies used
-- Include programming languages, frameworks, and key libraries
+-Frontend: Flutter (Dart, Material UI)
+-Image Processing: image, image_picker (Dart packages)
+-Location Services: geolocator (Dart package)
+-Networking & APIs: http package, Open-Meteo API, Vegetable Recommendation API
+-State Management: setState() (Flutter Stateful Widgets)
+-Backend (External APIs): Uses third-party APIs, can be extended with Flask/FastAPI/Node.js  
 
 ## 📦 Prerequisites
-- List all required software and versions
-- Include installation instructions
-- Example:
-  ```
-  - Node.js (v14+)
-  - npm (v6+)
-  - Python (v3.8+)
-  ```
+Flutter SDK (Latest version)
+Dart SDK (Comes with Flutter)
+VS Code or Android Studio (For development)
+Android Emulator or Physical Device (For testing)
+Flutter Packages:
+image (For image processing)
+image_picker (For selecting images)
+geolocator (For location services)
+http (For API calls)
+Internet Connection (For fetching weather and recommendations)3.8+)
+  
 
 ## 🔧 Installation & Setup
 
@@ -53,9 +59,9 @@ A concise, engaging description of your hackathon project.
    ```
 
 ## Team Members
-  [1.Team Member 1](enter_github_id_here)   
-  [2.Team Member 2](enter_github_id_here)   
-  [3.Team Member 3](enter_github_id_here)   
-  [4.Team Member 4](enter_github_id_here)  
+  [1.Angelina Anto](enter_github_id_here)   
+  [2.Anna Grace Raju](enter_github_id_here)   
+  [3.Devangana T S](enter_github_id_here)   
+  [4.Angel Jojo](enter_github_id_here)  
 
 **Made with ❤️ at Beachhack 6**
