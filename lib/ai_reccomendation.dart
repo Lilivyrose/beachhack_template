@@ -85,7 +85,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Space Analysis")),
+      appBar: AppBar(title: const Text("Space Analysis"),backgroundColor: Colors.green,),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
