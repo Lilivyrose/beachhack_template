@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class RecommendationsPage extends StatefulWidget {
+  const RecommendationsPage({super.key});
+
   @override
   _RecommendationsPageState createState() => _RecommendationsPageState();
 }
@@ -185,9 +187,9 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
                                             ),
                                           ),
                                           const SizedBox(height: 5),
-                                          Text("💧 Watering: Every 2 days", style: TextStyle(fontSize: 14)),
-                                          Text("🌱 Fertilizing: Weekly", style: TextStyle(fontSize: 14)),
-                                          Text("☀ Sunlight: 6-8 hours", style: TextStyle(fontSize: 14)),
+                                          const Text("💧 Watering: Every 2 days", style: TextStyle(fontSize: 14)),
+                                          const Text("🌱 Fertilizing: Weekly", style: TextStyle(fontSize: 14)),
+                                          const Text("☀ Sunlight: 6-8 hours", style: TextStyle(fontSize: 14)),
                                         ],
                                       ),
                                     ),

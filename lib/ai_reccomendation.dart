@@ -5,6 +5,8 @@ import 'dart:html' as html;
 import 'dart:convert';
 
 class AIRecommendationPage extends StatefulWidget {
+  const AIRecommendationPage({super.key});
+
   @override
   _AIRecommendationPageState createState() => _AIRecommendationPageState();
 }
@@ -39,7 +41,7 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   Future<void> _uploadAndAnalyzeImage() async {
     if (_selectedImage == null || _filename == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please select an image first!"))
+        const SnackBar(content: Text("Please select an image first!"))
       );
       return;
     }
@@ -83,65 +85,41 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("AI Recommendation")),
+      appBar: AppBar(title: const Text("AI Recommendation")),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
-            Text("Upload a Balcony/Outdoor Image", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
+            const SizedBox(height: 20),
+            const Text("Upload a Balcony/Outdoor Image", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
             _selectedImage != null
                 ? Image.memory(_selectedImage!, width: 300, height: 200, fit: BoxFit.cover)
-                : Text("No image selected"),
-            SizedBox(height: 20),
+                : const Text("No image selected"),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickImage,
-              child: Text("Upload Image"),
+              child: const Text("Upload Image"),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _uploadAndAnalyzeImage,
-              child: Text("Analyze"),
+              child: const Text("Analyze"),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _outputImage != null
                 ? Column(
                     children: [
-                      Text("Optimized Layout", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 10),
+                      const Text("Optimized Layout", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
                       Image.memory(_outputImage!, width: 300, height: 200, fit: BoxFit.cover),
-                      SizedBox(height: 20),
-                      _buildColorCodeLegend(), // Add color code legend
+                      const SizedBox(height: 20),
                     ],
                   )
                 : Container(),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildColorCodeLegend() {
-    return Column(
-      children: [
-        Text("Color Code Guide", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        SizedBox(height: 10),
-        _buildColorLegendItem(Colors.green, "Green - Plants in Pots"),
-        _buildColorLegendItem(Colors.blue, "Blue - Hanging Plants"),
-        _buildColorLegendItem(Colors.red, "Red - Trellis Plants (Climbers)"),
-      ],
-    );
-  }
-
-  Widget _buildColorLegendItem(Color color, String text) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(width: 20, height: 20, color: color),
-        SizedBox(width: 10),
-        Text(text, style: TextStyle(fontSize: 16)),
-      ],
     );
   }
 }
