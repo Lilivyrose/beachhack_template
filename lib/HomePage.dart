@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
                 _buildCubeButton(
                   context,
                   icon: Icons.science,
-                  label: "AI Recommendation",
+                  label: "Space Analysis",
                   onPressed: () {
                     Navigator.push(
                       context,

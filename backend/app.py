@@ -66,7 +66,9 @@ def analyze():
     for contour in contours:
         x, y, w, h = cv2.boundingRect(contour)
         if w * h > 500:  # Ignore very small regions
-            cv2.putText(output_image, "🌱", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.rectangle(output_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(output_image, "Plant", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+
 
     output_filename = f"output_{filename}"
     output_path = os.path.join(OUTPUT_FOLDER, output_filename)

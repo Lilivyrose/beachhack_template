@@ -60,14 +60,13 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Logo Image
               Center(
-                child: Text(
-                  "HexaFarm",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green[900],
-                  ),
+                child: Image.asset(
+                  'assets/logo.jpg', // Using logo.jpg
+                  height: 150,  // Increase the height
+    width: 150,   // Increase the width
+    fit: BoxFit.contain, // Adjust the height as needed
                 ),
               ),
               const SizedBox(height: 40),

@@ -84,7 +84,7 @@ class _CropDetailsPageState extends State<CropDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Vegetable Growing Details"),
+        title: const Text("Crop Details"),
         backgroundColor: Colors.green,
       ),
       body: Padding(

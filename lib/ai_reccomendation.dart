@@ -85,39 +85,72 @@ class _AIRecommendationPageState extends State<AIRecommendationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("AI Recommendation")),
+      appBar: AppBar(title: const Text("Space Analysis")),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            const Text("Upload a Balcony/Outdoor Image", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            _selectedImage != null
-                ? Image.memory(_selectedImage!, width: 300, height: 200, fit: BoxFit.cover)
-                : const Text("No image selected"),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: const Text("Upload Image"),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _uploadAndAnalyzeImage,
-              child: const Text("Analyze"),
-            ),
-            const SizedBox(height: 20),
-            _outputImage != null
-                ? Column(
-                    children: [
-                      const Text("Optimized Layout", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                      Image.memory(_outputImage!, width: 300, height: 200, fit: BoxFit.cover),
-                      const SizedBox(height: 20),
-                    ],
-                  )
-                : Container(),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              const Text(
+                "Upload a Balcony/Outdoor Image",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              
+              _selectedImage != null
+                  ? Image.memory(
+                      _selectedImage!,
+                      width: 300,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      width: 300,
+                      height: 200,
+                      color: Colors.grey[300],
+                      alignment: Alignment.center,
+                      child: const Text("No image selected"),
+                    ),
+              
+              const SizedBox(height: 20),
+              
+              ElevatedButton(
+                onPressed: _pickImage,
+                child: const Text("Upload Image"),
+              ),
+
+              const SizedBox(height: 20),
+
+              ElevatedButton(
+                onPressed: _uploadAndAnalyzeImage,
+                child: const Text("Analyze"),
+              ),
+
+              const SizedBox(height: 20),
+
+              _outputImage != null
+                  ? Column(
+                      children: [
+                        const Text(
+                          "Optimized Layout",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        Image.memory(
+                          _outputImage!,
+                          width: 300,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    )
+                  : Container(),
+            ],
+          ),
         ),
       ),
     );
