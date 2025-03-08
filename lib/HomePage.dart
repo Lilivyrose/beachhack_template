@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RecommendationsPage()),
+                      MaterialPageRoute(builder: (context) => const RecommendationsPage()),
                     );
                   },
                 ),
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  AIRecommendationPage()),
+                      MaterialPageRoute(builder: (context) =>  const AIRecommendationPage()),
                     );
                   },
                 ),
